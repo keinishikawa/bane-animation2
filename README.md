@@ -1,8 +1,5 @@
-# bane-animation2
-バネのアニメーション
-
-//61316444 êºêÏÅ@åc
-//É}ÉXÅEÉoÉlÅEÉ_ÉìÉpÇÃÉAÉjÉÅÅ[ÉVÉáÉìÇ∆csvÉtÉ@ÉCÉãÇ÷ÇÃï€ë∂
+//61316444 西川　慶
+//マス・バネ・ダンパのアニメーションとcsvファイルへの保存
 
 #include <windows.h>
 #include <math.h>
@@ -14,7 +11,7 @@
 #include "sdglib.h"
 using namespace std;
 
-//ïœêîÇÃíËã`
+//変数の定義
 
 static double xx, yy, tt, rr, vv, xx1, yy1, tt1, rr1, vv1;
 static double graph[1000], graph1[1000];
@@ -22,11 +19,11 @@ char buff1[100];
 char string_s[] = "x";
 char string_s1[] = "t";
 
-//ÉAÉEÉgÉvÉbÉgÉtÉ@ÉCÉãÇäJÇ≠
+//アウトプットファイルを開く
 ofstream outfile;
 
 
-//ÉfÉBÉXÉvÉåÉCÇ…ä÷Ç∑ÇÈìÆçÏ
+//ディスプレイに関する動作
 
 void displayfunc(){
 	using namespace SDGLibF;
@@ -36,11 +33,11 @@ void displayfunc(){
 	// Set drawing plane
 	Before();
 
-	//ç¿ïWÇÃçÏê¨
+	//座標の作成
 	SetColor(0.0, 0.0, 0.0);
 	DrawLine(1.0, 0.0, 0.0, 600.0, 0.0);
 
-	//ìÆÇ≠â~ÇÃçÏê¨Åiè„Ç©ÇÁê‘ÅAê¬Åj
+	//動く円の作成（上から赤、青）
 	SetColor(1.0, 0.0, 0.0);
 	DrawCircle(3.0, tt, xx, rr);
 	for (i = 0; i < tt - 1; i++)DrawLine(3.0, i, graph[i], i + 1, graph[i + 1]);
@@ -48,7 +45,7 @@ void displayfunc(){
 	DrawCircle(1.0, tt1, xx1, rr1);
 	for (i = 0; i < tt1 - 1; i++)DrawLine(1.0, i, graph1[i], i + 1, graph1[i + 1]);
 
-	//âÊñ ç∂è„Ç…ÉfÅ[É^ÇÃï\é¶
+	//画面左上にデータの表示
 	SetColor(1.0, 0.0, 0.0);
 	sprintf_s(buff, "tt=%7.2f xx=%7.2f rr=%7.2f ", tt, xx, rr);
 	DrawString(30, 270, buff);
@@ -56,16 +53,16 @@ void displayfunc(){
 	sprintf_s(buff, "tt1=%7.2f xx1=%7.2f rr1=%7.2f ", tt1, xx1, rr1);
 	DrawString(30, 250, buff);
 
-	//SAVEDATA!ÇÃï\é¶
+	//SAVEDATA!の表示
 	SetColor(1.0, 0.0, 0.0);
 	DrawString(30, 200, buff1);
 
-	//x,ÇîÇÃï\é¶
+	//x,ｔの表示
 	SetColor(0.0, 0.0, 0.0);
 	DrawString(20, 230, string_s);
 	DrawString(570, 20, string_s1);
 
-	//ìyë‰ÇÃï`âÊ
+	//土台の描画
 	SetColor(0.0, 0.0, 0.0);
 	DrawLine(2.0, 20.0, -250.0, 580.0, -250.0);
 	DrawLine(2.0, 580.0, -250.0, 580.0, -260.0);
@@ -74,7 +71,7 @@ void displayfunc(){
 	DrawLine(2.0, 10.0, -130.0, 20.0, -130.0);
 	DrawLine(2.0, 20.0, -250.0, 20.0, -130.0);
 
-	//ê‘Ç¢ï˚ÇÃÉAÉjÉÅÅ[ÉVÉáÉì
+	//赤い方のアニメーション
 	SetColor(1.0, 0.0, 0.0);
 	DrawLine(2.0, 20.0, -200.0, 60.0, -200.0);
 	DrawLine(2.0, 60.0, -200.0, 70.0 + xx / 5, -170);
@@ -94,7 +91,7 @@ void displayfunc(){
 	DrawLine(2.0, 260.0 + 11 * xx / 5, -150.0, 260.0 + 11 * xx / 5, -250.0);
 	DrawLine(2.0, 210.0 + 11 * xx / 5, -250.0, 260.0 + 11 * xx / 5, -250.0);
 
-	//ê¬Ç¢ï˚ÇÃÉAÉjÉÅÅ[ÉVÉáÉì
+	//青い方のアニメーション
 	SetColor(0.0, 0.0, 1.0);
 	DrawLine(2.0, 20.0, -200.0, 60.0, -200.0);
 	DrawLine(2.0, 60.0, -200.0, 70.0 + xx1 / 5, -170);
@@ -121,12 +118,12 @@ void displayfunc(){
 
 
 
-//â…Ç»Ç∆Ç´Ç…çsÇ»Ç§ìÆçÏ
+//暇なときに行なう動作
 
 void simulation(void){
 	using namespace SDGLibF;
 
-	//ï®óùìIÉfÅ[É^ÇÃì¸óÕ
+	//物理的データの入力
 	static int count = 0, n;
 	static double x = 0.0, vx = 1.0, ax = 0.0;
 	static double m = 1.0, D = 1.0, k = 100.0, f = 1.0;
@@ -134,7 +131,7 @@ void simulation(void){
 	static double m1 = 1.0, D1 = 1.0, k1 = 10.0, f1 = 10.0;
 	static double dt = 0.002, g = 9.8, mag = 700.0;
 
-	//ê‘Ç¢ï˚ÇÃâ^ìÆÇÃéÆ
+	//赤い方の運動の式
 	n = (int)(1.0 / dt);
 	if (vv > 0.0) { vx += 0.0; vv = 0.0; }
 	ax = (f - D*vx - k*x) / m;
@@ -145,7 +142,7 @@ void simulation(void){
 	if (x < 0.0) { vx = fabs(vx)*0.9; yy = 0.0; }
 	graph[(int)tt] = xx;
 
-	//ê¬Ç¢ï˚ÇÃâ^ìÆÇÃéÆ
+	//青い方の運動の式
 	n = (int)(1.0 / dt);
 	if (vv1 > 0.0) { vx1 += 0.0; vv1 = 0.0; }
 	ax1 = (f - D1*vx1 - k1*x1) / m1;
@@ -156,14 +153,14 @@ void simulation(void){
 	if (x1 < 0.0) { vx1 = fabs(vx1)*0.9; yy1 = 0.0; }
 	graph1[(int)tt1] = xx1;
 
-	//ÉfÉBÉXÉvÉåÉCçXêV
+	//ディスプレイ更新
 	if (((count++) % (1)) == 0)  ReDraw();
 }
 
 
 
 
-//ÉLÅ[É{Å[ÉhÇ…ä÷Ç∑ÇÈìÆçÏ
+//キーボードに関する動作
 
 void keyboardfunc(unsigned char k, int x, int y){
 	using namespace SDGLibF;
@@ -171,13 +168,13 @@ void keyboardfunc(unsigned char k, int x, int y){
 	case 27:  exit(0);
 	case 'C': SetCursor(GLUT_CURSOR_RIGHT_ARROW); break;
 	case 'c': SetCursor(GLUT_CURSOR_WAIT); break;
-		//ãÖÇÃëÂÇ´Ç≥ïœçX
+		//球の大きさ変更
 	case 'r': rr += 5.0; break;
 	case 'R': rr -= 5.0; break;
 	case 'v':
 	case 'V': vv = 1.0; break;
 	case 's': IdleFunc(simulation); break;
-		//SAVEDATA!Ç∆ÉfÉBÉXÉvÉåÉCÇ…ï\é¶ÇµÅAÇªÇÃÉfÅ[É^ÇcsvÉtÉ@ÉCÉãÇ…ï€ë∂Ç∑ÇÈìÆçÏ
+		//SAVEDATA!とディスプレイに表示し、そのデータをcsvファイルに保存する動作
 	case 'S': sprintf_s(buff1, "SAVE DATA!"); ReDraw(); IdleFunc(NULL);
 		outfile.open("simudata.csv");
 		outfile << "xx" << "," << "tt" << endl;
@@ -191,15 +188,15 @@ void keyboardfunc(unsigned char k, int x, int y){
 
 
 
-//ÉÅÉCÉìä÷êî
+//メイン関数
 
 int main(void){
-	//âÊñ ï\é¶ÇÃê›íË
+	//画面表示の設定
 	SDGLib mygraphic(600, 600, "- 2D Graphics - (61316444 Kei Nishikawa)", 0.0, 600.0, -300.0, 300.0);
 	mygraphic.SetCursor(GLUT_CURSOR_WAIT);
 	mygraphic.Display(displayfunc);
 	mygraphic.Keyboard(keyboardfunc);
-	//èâä˙ílÇÃê›íË
+	//初期値の設定
 	tt = 0.0; xx = 0.0; yy = 0.0; rr = 10.0; tt1 = 0.0; xx1 = 0.0; yy1 = 0.0; rr1 = 10.0;
 	mygraphic.Start();
 	return 0;
@@ -207,11 +204,11 @@ int main(void){
 
 
 /*
-çlé@ÅEê‡ñæ
-ÅEéøó ÅCå∏êäåWêîÅCÉoÉlíËêîÇïœÇ¶ÇƒÇQéÌóﬁÇÃå∏êäî‰ÇíËÇﬂÅCÇªÇÍÇºÇÍÇÃèÍçáÇ…Ç¬Ç¢ÇƒÅCÉ}ÉXà íuÇÃéûä‘ïœâªÇê}é¶ÇµÅA
-Å@ÇªÇÃÉ}ÉXÅEÉoÉlÅEÉ_ÉìÉpÇÃìÆÇ´ÇÉAÉjÉÅÅ[ÉVÉáÉìÇ≈ï`âÊÇ∑ÇÈÉvÉçÉOÉâÉÄÇ≈Ç†ÇÈÅB
- ÅEÉAÉjÉÅÅ[ÉVÉáÉìÇÃï`âÊÇ≈ÇÕÅAê¸ï™ÇÃèIì_ÇéüÇÃê¸ï™ÇÃénì_Ç∆ìØÇ∂ç¿ïWÇ…ê›íËÇ∑ÇÈÇ±Ç∆Ç≈ÉoÉlÇÃòAë±ê´Çï\åªÇµÇΩÅB
- ÅEcsvÉtÉ@ÉCÉãÇ…ÉfÅ[É^Çï€ë∂Ç∑ÇÈÇ∆Ç´ÇÕÅA","Ç≈ãÊêÿÇÈÇ∆ó◊ÇÃÉZÉãÇ…ÉfÅ[É^ï€ë∂èÍèäÇ™à⁄ìÆÇ∑ÇÈÅB
+考察・説明
+・質量，減衰係数，バネ定数を変えて２種類の減衰比を定め，それぞれの場合について，マス位置の時間変化を図示し、
+　そのマス・バネ・ダンパの動きをアニメーションで描画するプログラムである。
+ ・アニメーションの描画では、線分の終点を次の線分の始点と同じ座標に設定することでバネの連続性を表現した。
+ ・csvファイルにデータを保存するときは、","で区切ると隣のセルにデータ保存場所が移動する。
  */
 
 
